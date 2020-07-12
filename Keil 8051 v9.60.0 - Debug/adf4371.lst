@@ -1,0 +1,178 @@
+C51 COMPILER V9.60.0.0   ADF4371                                                           07/11/2020 15:42:35 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE ADF4371
+OBJECT MODULE PLACED IN .\adf4371.OBJ
+COMPILER INVOKED BY: d:\SiliconLabs\SimplicityStudio\v4\developer\toolchains\keil_8051\9.60\BIN\C51.exe F:\simplicity_st
+                    -udo_workspace\F31x_Blinky_adf4371\adf4371.c OMF2 LARGE DEBUG OBJECTEXTEND ROM(LARGE) WARNINGLEVEL(2) FLOATFUZZY(3) OPTIM
+                    -IZE(8,SPEED) INTVECTOR(0X0000) INTPROMOTE INCDIR(D:/SiliconLabs/SimplicityStudio/v4/developer/sdks/8051/v4.1.7//Device/s
+                    -hared/si8051Base;D:/SiliconLabs/SimplicityStudio/v4/developer/sdks/8051/v4.1.7//Device/C8051F310/inc) PRINT(.\adf4371.ls
+                    -t) COND PAGEWIDTH(120) PAGELENGTH(65) OBJECT(.\adf4371.OBJ)
+
+line level    source
+
+   1          /*
+   2           * adf4371.c
+   3           *
+   4           *  Created on: 2020Äê7ÔÂ11ÈÕ
+   5           *      Author: wrangler
+   6           */
+   7          #include <SI_C8051F310_Register_Enums.h>
+   8          
+   9          #define CS_1 (P1 |= 0x04)
+  10          #define CS_0 (P1 &= ~0x04)
+  11          
+  12          #define DAT_1 (P1 |= 0x08)
+  13          #define DAT_0 (P1 &= ~0x08)
+  14          
+  15          #define CLK_1 (P1 |= 0x10)
+  16          #define CLK_0 (P1 &= ~0x10)
+  17          
+  18          #define CE_1 (P1 |= 0x20)
+  19          #define CE_0 (P1 &= ~0x20)
+  20          
+  21          unsigned char reg_var[128] =
+  22          {
+  23                          0x10,0x40,
+  24                          0x11,0x00,
+  25                          0x12,0x40,
+  26                          0x14,0xAA,
+  27                          0x15,0xAA,
+  28                          0x16,0x2A,
+  29                          0x17,0x05,
+  30                          0x18,0x00,
+  31                          0x19,0x03,
+  32                          0x1a,0x00,
+  33                          0x1b,0x00,
+  34                          0x1c,0x00,
+  35                          0x1d,0x00,
+  36                          0x1e,0x48,
+  37                          0x1f,0x01,
+  38                          0x20,0x14,
+  39                          0x21,0x00,
+  40                          0x22,0x00,
+  41                          0x23,0x00,
+  42                          0x24,0x080,
+  43                          0x25,0x13,
+  44                          0x26,0x19,
+  45                          0x27,0x0CD,
+  46                          0x28,0x083,
+  47                          0x2a,0x00,
+  48                          0x2b,0x10,
+  49                          0x2c,0x44,
+  50                          0x2d,0x11,
+  51                          0x2e,0x12,
+  52                          0x2f,0x094,
+C51 COMPILER V9.60.0.0   ADF4371                                                           07/11/2020 15:42:35 PAGE 2   
+
+  53                          0x30,0x32,
+  54                          0x31,0x02,
+  55                          0x32,0x04,
+  56                          0x33,0x23,
+  57                          0x34,0x086,
+  58                          0x35,0x0FF,
+  59                          0x36,0x30,
+  60                          0x37,0x00,
+  61                          0x38,0x00,
+  62                          0x39,0x07,
+  63                          0x3a,0x55,
+  64                          0x3d,0x00,
+  65                          0x3e,0x0C,
+  66                          0x3f,0x080,
+  67                          0x40,0x50,
+  68                          0x41,0x28,
+  69                          0x42,0x00,
+  70                          0x43,0x00,
+  71                          0x44,0x00,
+  72                          0x45,0x00,
+  73                          0x46,0x00,
+  74                          0x47,0x0C0,
+  75                          0x52,0x0F4,
+  76                          0x6c,0x00,
+  77                          0x6e,0x00,
+  78                          0x6f,0x00,
+  79                          0x70,0x0E3,
+  80                          0x71,0x01,
+  81                          0x72,0x32,
+  82                          0x73,0x00,
+  83                          0x79,0x00,
+  84                          0x7a,0x00,
+  85                          0x7b,0x00,
+  86                          0x7c,0x00
+  87          };
+  88          
+  89          void ConfigReset()
+  90          {
+  91   1              CE_1;
+  92   1      
+  93   1              CS_1;
+  94   1              CLK_1;
+  95   1              DAT_1;
+  96   1      }
+  97          
+  98          
+  99          void ConfigReg(unsigned int reg,unsigned char var)
+ 100          {
+ 101   1              unsigned char index;
+ 102   1              reg &= ~0x8000;
+ 103   1              CS_0;
+ 104   1      
+ 105   1              for(index=0;index<16;index++)
+ 106   1              {
+ 107   2                      if((reg & 0x8000) == 0x8000)
+ 108   2                              DAT_1;
+ 109   2                      else DAT_0;
+ 110   2                      CLK_0;
+ 111   2                      CLK_1;
+ 112   2      
+ 113   2                      reg = (reg << 1);
+ 114   2              }
+ 115   1      
+C51 COMPILER V9.60.0.0   ADF4371                                                           07/11/2020 15:42:35 PAGE 3   
+
+ 116   1              for(index=0;index<8;index++)
+ 117   1              {
+ 118   2                      if((var & 0x8000) == 0x8000)
+ 119   2                              DAT_1;
+ 120   2                      else DAT_0;
+ 121   2                      CLK_0;
+ 122   2                      CLK_1;
+ 123   2      
+ 124   2                      var = (var << 1);
+ 125   2              }
+ 126   1      
+ 127   1              CS_1;
+ 128   1      }
+ 129          
+ 130          void ConfigADF4371()
+ 131          {
+ 132   1              unsigned char index;
+ 133   1              ConfigReg(0x00,0x00);
+ 134   1              ConfigReg(0x01,0x80);
+ 135   1      
+ 136   1              for(index = 0;index<128;index=index+2)
+ 137   1                      ConfigReg(reg_var[index],reg_var[index+1]);
+ 138   1      }
+ 139          
+ 140          
+ 141          
+ 142          
+ 143          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    163    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    128    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

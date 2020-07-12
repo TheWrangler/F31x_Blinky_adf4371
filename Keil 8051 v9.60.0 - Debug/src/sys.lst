@@ -1,0 +1,67 @@
+C51 COMPILER V9.60.0.0   SYS                                                               07/11/2020 17:27:24 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SYS
+OBJECT MODULE PLACED IN .\src\sys.OBJ
+COMPILER INVOKED BY: d:\SiliconLabs\SimplicityStudio\v4\developer\toolchains\keil_8051\9.60\BIN\C51.exe F:\simplicity_st
+                    -udo_workspace\F31x_Blinky_adf4371\src\sys.c OMF2 LARGE DEBUG OBJECTEXTEND ROM(SMALL) WARNINGLEVEL(2) FLOATFUZZY(3) OPTIM
+                    -IZE(8,SPEED) INTVECTOR(0X0000) INTPROMOTE INCDIR(D:/SiliconLabs/SimplicityStudio/v4/developer/sdks/8051/v4.1.7//Device/s
+                    -hared/si8051Base;D:/SiliconLabs/SimplicityStudio/v4/developer/sdks/8051/v4.1.7//Device/C8051F310/inc) PRINT(.\src\sys.ls
+                    -t) COND PAGEWIDTH(120) PAGELENGTH(65) OBJECT(.\src\sys.OBJ)
+
+line level    source
+
+   1          /*
+   2           * sys.c
+   3           *
+   4           *  Created on: 2020Äê1ÔÂ23ÈÕ
+   5           *      Author: wrangler
+   6           */
+   7          #include <SI_C8051F310_Register_Enums.h>
+   8          
+   9          unsigned long Sys_Clk = 24500000;
+  10          
+  11          void Port_IO_Init()
+  12          {
+  13   1          P1MDOUT   = 0x3C;
+  14   1          XBR1      = 0x40;
+  15   1      }
+  16          
+  17          void Oscillator_Init()
+  18          {
+  19   1              //internal osc enable,SYSCLK derived from internal osc divided by 1
+  20   1          OSCICN    = 0x83;
+  21   1      }
+  22          
+  23          void Interrupts_Init()
+  24          {
+  25   1          IP        = 0x10;
+  26   1          IE        = 0x50;
+  27   1      }
+  28          
+  29          void Init_Device(void)
+  30          {
+  31   1              IE &= ~0x80;
+  32   1      
+  33   1              Port_IO_Init();
+  34   1          Oscillator_Init();
+  35   1      }
+  36          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     25    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      4    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
